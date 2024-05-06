@@ -15,5 +15,9 @@ public class ConfigProperties {
 	private String fileExtension;
 
 	private String accessDataSuffix;
+	
+	private String destinationInfoSuffix;
+	
+	private String supportedFileFormats;
 
 }

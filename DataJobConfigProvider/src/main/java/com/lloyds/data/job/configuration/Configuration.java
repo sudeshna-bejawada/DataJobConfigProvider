@@ -6,7 +6,7 @@ import lombok.Data;
 public class Configuration {
 	
 	
-	public String jobname;
+	public String jobName;
 	
 	public String jobDescription;	
 	

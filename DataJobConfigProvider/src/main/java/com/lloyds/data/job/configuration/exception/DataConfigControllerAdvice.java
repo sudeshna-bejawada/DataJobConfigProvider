@@ -28,16 +28,13 @@ public class DataConfigControllerAdvice extends  ResponseEntityExceptionHandler 
     	return ex.getLocalizedMessage();
     }
 
-	/*
-	 * @ExceptionHandler(FileNotFoundException.class) public ResponseEntity<String>
-	 * handleUserNotFoundException(FileNotFoundException ex) { return
-	 * ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found: " +
-	 * ex.getMessage()); }
-	 * 
-	 * @ExceptionHandler(DataFormatException.class) public ResponseEntity<String>
-	 * handleDataFormatException(DataFormatException ex) { return
-	 * ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Data format error: " +
-	 * ex.getMessage()); }
-	 */
+	 
+	  @ExceptionHandler(FileUnSupportedException.class)
+	  @ResponseStatus(HttpStatus.BAD_REQUEST)
+	  @ResponseBody  
+	  public String handleFileUnSupportedException(FileUnSupportedException ex) { 
+		  return ex.getLocalizedMessage();
+		 
+	  }
 
 }
