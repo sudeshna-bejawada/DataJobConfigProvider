@@ -9,5 +9,7 @@ public class DataJobConfigProviderApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DataJobConfigProviderApplication.class, args);
 	}
+	
+	
 
 }
