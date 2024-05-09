@@ -1,10 +1,7 @@
 package com.lloyds.data.job.configuration.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -12,21 +9,17 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.lloyds.data.job.configuration.AccessInfo;
 import com.lloyds.data.job.configuration.ConfigProperties;
-import com.lloyds.data.job.configuration.Configuration;
 import com.lloyds.data.job.configuration.DestinationInfo;
 import com.lloyds.data.job.configuration.Secret;
-import com.lloyds.data.job.configuration.exception.FileUnSupportedException;
+import com.lloyds.data.job.configuration.SourceInfo;
 import com.lloyds.data.job.configuration.helper.DataConfigHelper;
 
 @Controller
@@ -42,16 +35,18 @@ public class DataJobConfigController {
 	@Autowired
 	DataConfigHelper dataConfigHelper;
 
-	@PostMapping("api/accessdata")
-	public ResponseEntity<?> postJobConfigurationAccessData(@RequestBody Configuration configuration)
+	@PostMapping("v1/api/accessdata")
+	public ResponseEntity<?> postJobConfigurationAccessData(@RequestBody AccessInfo accessInfo)
 			throws IOException {
+		
+		Secret secret = accessInfo.getConfiguration().getSecret();
 
-		if (configuration.getSecret().getVaultURL().isEmpty() || configuration.getJobName().isEmpty()
-				|| configuration.getSecret().getAccessKey().isEmpty()) {
-			throw new NullPointerException(" JobName, VaultURL and SecretKey must have value");
+		if (secret.getVault_url().isEmpty() || accessInfo.getJobName().isEmpty()
+				|| secret.getAccess_key().isEmpty()) {
+			throw new NullPointerException(" JobName, vault_url and secret_key must have value");
 		}
 
-		String jobName = configuration.getJobName();
+		String jobName = accessInfo.getJobName();
 
 		String fileName = dataConfigHelper.getFileName(jobName, configProperties.getAccessDataSuffix());
 
@@ -61,25 +56,26 @@ public class DataJobConfigController {
 
 		if (!resource.exists()) {
 			ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-			objectMapper.writeValue(new File(configProperties.getPath() + fileName), configuration);
+			objectMapper.writeValue(new File(configProperties.getPath() + fileName), accessInfo);
 
 			return ResponseEntity.status(HttpStatus.CREATED).body(" Created access data job file " + fileName);
 
 		} else {
-			return ResponseEntity.status(HttpStatus.FOUND).body(jobName + "file  already exist in the given path");
+			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given path");
 		}
 
 	}
 
-	@PostMapping("api/destinationDetail")
-	public ResponseEntity<?> postDestinationDetails(@RequestBody DestinationInfo destination) throws IOException {
+	@PostMapping("v1/api/destinationDetail")
+	public ResponseEntity<?> postDestinationDetails(@RequestBody DestinationInfo destinationInfo) throws IOException {
 
 		// Stream<String> stream =
 		// Stream.of(configProperties.getSupportedFileFormats().split(","));
 
 		// stream.filter(S-> S.equals(destination.getFormat())).findAny().orElse(null);
+			
 
-		String jobName = destination.getJobName();
+		String jobName = destinationInfo.getJobName();
 
 		String fileName = dataConfigHelper.getFileName(jobName, configProperties.getDestinationInfoSuffix());
 
@@ -89,12 +85,37 @@ public class DataJobConfigController {
 
 		if (!resource.exists()) {
 			ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-			objectMapper.writeValue(new File(configProperties.getPath() + fileName), destination);
+			objectMapper.writeValue(new File(configProperties.getPath() + fileName), destinationInfo);
 
 			return ResponseEntity.status(HttpStatus.CREATED).body(" Created destination details job file " + fileName);
 
 		} else {
-			return ResponseEntity.status(HttpStatus.FOUND).body(jobName + "file  already exist in the given path");
+			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given path");
+		}
+
+	}
+	
+	
+	@PostMapping("v1/api/jobconfigurations")
+	public ResponseEntity<?> postJobConfigurationInfo(@RequestBody SourceInfo sourceInfo) throws IOException {
+
+	    String jobName = sourceInfo.getJobName();    
+	    
+
+		String fileName = dataConfigHelper.getFileName(jobName, configProperties.getJobConfigInfoSuffix());
+
+		System.out.println("fileName " + fileName);
+
+		Resource resource = resourceLoader.getResource("file:" + configProperties.getPath() + fileName);
+
+		if (!resource.exists()) {
+			ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+			objectMapper.writeValue(new File(configProperties.getPath() + fileName), sourceInfo);
+
+			return ResponseEntity.status(HttpStatus.CREATED).body(" Created job configuration file " + fileName);
+
+		} else {
+			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given path");
 		}
 
 	}

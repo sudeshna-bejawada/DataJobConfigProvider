@@ -6,11 +6,10 @@ import lombok.Data;
 public class Secret {	
 	
 	
-	private String vaultURL;
-	
+	private String vault_url;	
 
-	private String accessKey;
+	private String access_key;
 	
-	private String secretKey;
+	private String secret_key;
 
 	}
