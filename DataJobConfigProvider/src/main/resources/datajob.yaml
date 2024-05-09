@@ -1,7 +1,0 @@
----
-jobname: "datajob"
-jobDescription: "to dump data"
-secret:
-  vaultURL: ""
-  accessKey: "ahhskskksks"
-  secretKey: "27888"

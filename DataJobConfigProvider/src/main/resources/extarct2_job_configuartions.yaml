@@ -1,0 +1,36 @@
+---
+jobName: "extarct2"
+jobDesc: "Description"
+source:
+  source_url: "www.SQLDeveloper.url"
+  job_Configurations:
+  - schema_keyspace: "Sample"
+    tables:
+    - name: "Employee"
+      columns:
+      - name: "ID"
+        type: "VarChar2()"
+        value_range: 
+        predicates: 
+        joins: 
+      - name: "name"
+        type: "VarChar2()"
+        value_range: "Sudeshna"
+        predicates:
+        - "LIKE"
+        joins: 
+      - name: "Dept_ID"
+        type: "VarChar2()"
+        value_range: 
+        predicates: 
+        joins: 
+    - name: "Dept"
+      columns:
+      - name: "Dept_ID"
+        type: "VarChar2()"
+        value_range: "3"
+        predicates: 
+        joins:
+        - type: "INNER_JOIN"
+          joiningTable: "Employee"
+          joiningColumn: "Dept_ID"

@@ -1,0 +1,8 @@
+---
+jobName: "extract2"
+jobDescription: "Extract Load"
+configuration:
+  secret:
+    vault_url: "2345"
+    access_key: "1234"
+    secret_key: "3456"
