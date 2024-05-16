@@ -29,10 +29,10 @@ public class DataConfigControllerAdvice extends  ResponseEntityExceptionHandler 
     }
 
 	 
-	  @ExceptionHandler(FileUnSupportedException.class)
+	  @ExceptionHandler(BadRequestFormatException.class)
 	  @ResponseStatus(HttpStatus.BAD_REQUEST)
 	  @ResponseBody  
-	  public String handleFileUnSupportedException(FileUnSupportedException ex) { 
+	  public String handleFileUnSupportedException(BadRequestFormatException ex) { 
 		  return ex.getLocalizedMessage();
 		 
 	  }
