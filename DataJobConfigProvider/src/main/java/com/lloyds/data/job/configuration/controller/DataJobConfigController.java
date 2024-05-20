@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.lloyds.data.job.configuration.AccessInfo;
 import com.lloyds.data.job.configuration.ConfigProperties;
-import com.lloyds.data.job.configuration.DestinationInfo;
-import com.lloyds.data.job.configuration.SourceInfo;
+import com.lloyds.data.job.configuration.dto.DestinationInfo;
+import com.lloyds.data.job.configuration.dto.SourceInfo;
+import com.lloyds.data.job.configuration.dto.AccessInfo;
 import com.lloyds.data.job.configuration.exception.BadRequestFormatException;
 import com.lloyds.data.job.configuration.helper.DataConfigHelper;
 
@@ -47,17 +47,18 @@ public class DataJobConfigController {
 		dataConfigHelper.validateAccessInfo(accessInfo);
 
 		String fileName = dataConfigHelper.getFileName(jobName, configProperties.getAccessDataSuffix());
+		String path = configProperties.getPath();
 		logger.info("fileName " + fileName);
 
-		Resource resource = resourceLoader.getResource("file:" + configProperties.getPath() + fileName);
+		Resource resource = resourceLoader.getResource("file:" + path + fileName);
 
 		if (!resource.exists()) {
 			ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-			objectMapper.writeValue(new File(configProperties.getPath() + fileName), accessInfo);
-			return ResponseEntity.status(HttpStatus.CREATED).body(" Created access data job file " + fileName);
+			objectMapper.writeValue(new File(path + fileName), accessInfo);
+			return ResponseEntity.status(HttpStatus.CREATED).body(" Created access data job file " + fileName+ " in the Location " + path);
 
 		} else {
-			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given path");
+			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given Location " + path);
 		}
 
 	}
@@ -73,17 +74,18 @@ public class DataJobConfigController {
 		dataConfigHelper.validateFileFormats(destinationInfo.getDestination().getFormat());
 
 		String fileName = dataConfigHelper.getFileName(jobName, configProperties.getDestinationInfoSuffix());
+		String path = configProperties.getPath();
 		logger.info("fileName " + fileName);
 
-		Resource resource = resourceLoader.getResource("file:" + configProperties.getPath() + fileName);
+		Resource resource = resourceLoader.getResource("file:" + path + fileName);
 
 		if (!resource.exists()) {
 			ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-			objectMapper.writeValue(new File(configProperties.getPath() + fileName), destinationInfo);
-			return ResponseEntity.status(HttpStatus.CREATED).body(" Created destination details job file " + fileName);
+			objectMapper.writeValue(new File(path + fileName), destinationInfo);
+			return ResponseEntity.status(HttpStatus.CREATED).body(" Created destination details job file " + fileName + " in the Location " + path);
 
 		} else {
-			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given path");
+			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given Location " + path);
 		}
 
 	}
@@ -95,17 +97,18 @@ public class DataJobConfigController {
 		dataConfigHelper.validateJobName(jobName);
 
 		String fileName = dataConfigHelper.getFileName(jobName, configProperties.getJobConfigInfoSuffix());
+		String path = configProperties.getPath();
 		logger.info("fileName " + fileName);
 
-		Resource resource = resourceLoader.getResource("file:" + configProperties.getPath() + fileName);
+		Resource resource = resourceLoader.getResource("file:" + path + fileName);
 
 		if (!resource.exists()) {
 			ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-			objectMapper.writeValue(new File(configProperties.getPath() + fileName), sourceInfo);
-			return ResponseEntity.status(HttpStatus.CREATED).body(" Created job configuration file " + fileName);
+			objectMapper.writeValue(new File( path + fileName), sourceInfo);
+			return ResponseEntity.status(HttpStatus.CREATED).body(" Created job configuration file " + fileName + " in the Location " + path);
 
 		} else {
-			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given path");
+			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given Location " + path);
 		}
 
 	}

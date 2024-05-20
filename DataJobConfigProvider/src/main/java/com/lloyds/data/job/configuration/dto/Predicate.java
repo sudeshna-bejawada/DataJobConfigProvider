@@ -1,4 +1,4 @@
-package com.lloyds.data.job.configuration;
+package com.lloyds.data.job.configuration.dto;
 
 
 public enum Predicate {	

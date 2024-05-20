@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.lloyds.data.job.configuration.AccessInfo;
 import com.lloyds.data.job.configuration.ConfigProperties;
-import com.lloyds.data.job.configuration.Secret;
+import com.lloyds.data.job.configuration.dto.Secret;
+import com.lloyds.data.job.configuration.dto.AccessInfo;
 import com.lloyds.data.job.configuration.exception.BadRequestFormatException;
 
 @Component

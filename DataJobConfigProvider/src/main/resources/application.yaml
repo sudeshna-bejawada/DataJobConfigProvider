@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: DataJobConfigProvider
+data:
+ config:
+     path: src/main/resources/
+     fileExtension: .yaml
+     accessDataSuffix: access_data
+     destinationInfoSuffix: destination_details
+     jobConfigInfoSuffix: job_configurations
+     supportedFileFormats: avro,parquet,csv

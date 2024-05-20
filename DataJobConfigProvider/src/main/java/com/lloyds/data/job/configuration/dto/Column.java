@@ -1,7 +1,6 @@
-package com.lloyds.data.job.configuration;
+package com.lloyds.data.job.configuration.dto;
 
 import java.util.List;
-
 
 import lombok.Data;
 
