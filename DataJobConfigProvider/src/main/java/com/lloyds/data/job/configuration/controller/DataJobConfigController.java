@@ -18,11 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.lloyds.data.job.configuration.ConfigProperties;
-import com.lloyds.data.job.configuration.dto.DestinationInfo;
-import com.lloyds.data.job.configuration.dto.SourceInfo;
 import com.lloyds.data.job.configuration.dto.AccessInfo;
+import com.lloyds.data.job.configuration.dto.DestinationInfo;
+import com.lloyds.data.job.configuration.dto.JobConfigurationInfo;
+import com.lloyds.data.job.configuration.dto.SourceType;
 import com.lloyds.data.job.configuration.exception.BadRequestFormatException;
 import com.lloyds.data.job.configuration.helper.DataConfigHelper;
+import com.lloyds.data.job.configuration.response.FileSource;
+import com.lloyds.data.job.configuration.response.DataBaseSource;
+import com.lloyds.data.job.configuration.response.JobConfigurationResponse;
 
 @Controller
 @RequestMapping("datajobconfig")
@@ -91,20 +95,22 @@ public class DataJobConfigController {
 	}
 
 	@PostMapping("v1/api/jobconfigurations")
-	public ResponseEntity<?> postJobConfigurationInfo(@RequestBody SourceInfo sourceInfo) throws IOException {
+	public ResponseEntity<?> postJobConfigurationInfo(@RequestBody JobConfigurationInfo jobConfigInfo) throws IOException {
 
-		String jobName = sourceInfo.getJobName();
+		String jobName = jobConfigInfo.getJobName();
 		dataConfigHelper.validateJobName(jobName);
-
+		dataConfigHelper.validateSourceType(jobConfigInfo.getSource_type());
+	
 		String fileName = dataConfigHelper.getFileName(jobName, configProperties.getJobConfigInfoSuffix());
 		String path = configProperties.getPath();
 		logger.info("fileName " + fileName);
 
 		Resource resource = resourceLoader.getResource("file:" + path + fileName);
 
-		if (!resource.exists()) {
+		if (!resource.exists()) {			
+			JobConfigurationResponse response= buildJobConfigurationResponse(jobConfigInfo);
 			ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-			objectMapper.writeValue(new File( path + fileName), sourceInfo);
+			objectMapper.writeValue(new File( path + fileName), response);
 			return ResponseEntity.status(HttpStatus.CREATED).body(" Created job configuration file " + fileName + " in the Location " + path);
 
 		} else {
@@ -112,5 +118,39 @@ public class DataJobConfigController {
 		}
 
 	}
-
+	
+	
+	private JobConfigurationResponse buildJobConfigurationResponse(JobConfigurationInfo jobConfigInfo) {
+		
+		SourceType sourceType = jobConfigInfo.getSource_type();
+		JobConfigurationResponse response = new JobConfigurationResponse();
+		response.setJobName(jobConfigInfo.getJobName());
+		response.setJobDesc(jobConfigInfo.getJobDesc());
+		
+		if( sourceType.equals(SourceType.FILE_SYSTEM)) {
+			dataConfigHelper.validatePathAndFileType(jobConfigInfo.getPath(),jobConfigInfo.getFile_type());	
+			//System.out.println("size-->"+jobConfigInfo.getCsvJobConfigurations().size());
+			FileSource source= new FileSource();
+			source.setSource_type(jobConfigInfo.getSource_type());
+			source.setPath(jobConfigInfo.getPath());
+			source.setFile_Type(jobConfigInfo.getFile_type());
+			source.setJob_Configurations(jobConfigInfo.getFileSystemJobConfigurations());
+			response.setSource(source);
+		}
+		if( sourceType.equals(SourceType.DATABASE)) {
+			dataConfigHelper.validateSchemaAndSourceUrl(jobConfigInfo.getSchema(),jobConfigInfo.getSource_url());
+			//System.out.println("size-->"+jobConfigInfo.getDataBaseJobConfigurations().size());
+			DataBaseSource databaseResource= new DataBaseSource();
+			databaseResource.setSource_type(jobConfigInfo.getSource_type());
+			databaseResource.setSource_url(jobConfigInfo.getSource_url());
+			databaseResource.setSchema_keyspace(jobConfigInfo.getSchema());
+			databaseResource.setJob_Configurations(jobConfigInfo.getDataBaseJobConfigurations());
+			response.setSource(databaseResource);
+		}
+		
+		return response;
+		
+		
+	}
+	
 }

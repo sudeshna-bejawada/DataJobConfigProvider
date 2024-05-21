@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.lloyds.data.job.configuration.ConfigProperties;
 import com.lloyds.data.job.configuration.dto.Secret;
+import com.lloyds.data.job.configuration.dto.SourceType;
 import com.lloyds.data.job.configuration.dto.AccessInfo;
 import com.lloyds.data.job.configuration.exception.BadRequestFormatException;
 
@@ -65,6 +66,23 @@ public class DataConfigHelper {
 			throw new NullPointerException("jobName must have value");
 		}
 
+	}	
+
+
+
+	public void validatePathAndFileType(String path, String file_type) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void validateSchemaAndSourceUrl(String schema, String source_url) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void validateSourceType(SourceType source_type) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
