@@ -3,23 +3,16 @@ jobName: "TestCSV"
 jobDesc: "Description"
 source:
   source_type: "FILE_SYSTEM"
-  path: "src/main/resources"
+  path: "classpath"
   file_Type: "CSV"
   job_Configurations:
   - columns:
     - name: "ID"
       type: "VarChar2()"
-      value_range: null
-      predicates: null
-      joins: null
+      value_range: "1234"
     - name: "name"
       type: "VarChar2()"
       value_range: "Sudeshna"
-      predicates:
-      - "LIKE"
-      joins: null
     - name: "Dept_ID"
       type: "VarChar2()"
-      value_range: null
-      predicates: null
-      joins: null
+      value_range: "1234"

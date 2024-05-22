@@ -69,6 +69,32 @@ public class DataJobConfigController {
 
 	}
 
+	
+	@PostMapping("v1/api/jobconfigurations")
+	public ResponseEntity<?> postJobConfigurationInfo(@RequestBody JobConfigurationInfo jobConfigInfo) throws IOException {
+
+		String jobName = jobConfigInfo.getJobName();
+		dataConfigHelper.validateJobName(jobName);
+		dataConfigHelper.validateSourceType(jobConfigInfo.getSource_type());
+	
+		String fileName = dataConfigHelper.getFileName(jobName, configProperties.getJobConfigInfoSuffix());
+		String path = configProperties.getPath();
+		logger.info("fileName " + fileName);
+
+		Resource resource = resourceLoader.getResource("file:" + path + fileName);
+
+		if (!resource.exists()) {			
+			JobConfigurationResponse response= buildJobConfigurationResponse(jobConfigInfo);
+			ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+			objectMapper.writeValue(new File( path + fileName), response);
+			return ResponseEntity.status(HttpStatus.CREATED).body(" Created job configuration file " + fileName + " in the Location " + path);
+
+		} else {
+			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given Location " + path);
+		}
+
+	}
+	
 	@PostMapping("v1/api/destinationDetail")
 	public ResponseEntity<?> postDestinationDetails(@RequestBody DestinationInfo destinationInfo)
 			throws IOException, BadRequestFormatException {
@@ -96,30 +122,6 @@ public class DataJobConfigController {
 
 	}
 
-	@PostMapping("v1/api/jobconfigurations")
-	public ResponseEntity<?> postJobConfigurationInfo(@RequestBody JobConfigurationInfo jobConfigInfo) throws IOException {
-
-		String jobName = jobConfigInfo.getJobName();
-		dataConfigHelper.validateJobName(jobName);
-		dataConfigHelper.validateSourceType(jobConfigInfo.getSource_type());
-	
-		String fileName = dataConfigHelper.getFileName(jobName, configProperties.getJobConfigInfoSuffix());
-		String path = configProperties.getPath();
-		logger.info("fileName " + fileName);
-
-		Resource resource = resourceLoader.getResource("file:" + path + fileName);
-
-		if (!resource.exists()) {			
-			JobConfigurationResponse response= buildJobConfigurationResponse(jobConfigInfo);
-			ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-			objectMapper.writeValue(new File( path + fileName), response);
-			return ResponseEntity.status(HttpStatus.CREATED).body(" Created job configuration file " + fileName + " in the Location " + path);
-
-		} else {
-			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given Location " + path);
-		}
-
-	}
 	
 	
 	private JobConfigurationResponse buildJobConfigurationResponse(JobConfigurationInfo jobConfigInfo) {
