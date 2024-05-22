@@ -36,11 +36,11 @@ public class DataConfigHelper {
 
 	}
 
-	public void validateFileFormats(String format) throws BadRequestFormatException {
+	public void validateFileFormats(String format , String supportedFileFormats) throws BadRequestFormatException {
 		if (format == null || format.isEmpty()) {
-			throw new NullPointerException("format must have value");
+			throw new NullPointerException("format must have value"); 
 		}
-		List<String> supportedFormats = Arrays.asList(configProperties.getSupportedFileFormats().split(","));
+		List<String> supportedFormats = Arrays.asList(supportedFileFormats.split(","));
 		logger.info("supported formats are: " + supportedFormats);
 		if (!supportedFormats.contains(format)) {
 			throw new BadRequestFormatException("Unsupported file format " + format );
@@ -70,7 +70,9 @@ public class DataConfigHelper {
 
 
 
-	public void validatePathAndFileType(String path, String file_type) {
+	public void validatePathAndFileType(String path, String file_type) throws BadRequestFormatException {
+		
+		validateFileFormats(file_type,configProperties.getSourceSupportedFileFormats());
 	
 		//Supported formats  CSV,Jason,Parquet
 		// TODO Auto-generated method stub

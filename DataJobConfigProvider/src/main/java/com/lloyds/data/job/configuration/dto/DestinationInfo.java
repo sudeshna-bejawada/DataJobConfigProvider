@@ -6,7 +6,7 @@ import lombok.Data;
 public class DestinationInfo {
 	
 	private String jobName;
-	private String jobDesc;
+	private String jobDescription;
 	
 	private Destination destination;
 	

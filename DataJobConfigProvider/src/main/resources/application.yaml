@@ -8,4 +8,5 @@ data:
      accessDataSuffix: access_data
      destinationInfoSuffix: destination_details
      jobConfigInfoSuffix: job_configurations
-     supportedFileFormats: avro,parquet,csv
+     destinationSupportedFileFormats: avro,parquet,csv
+     sourceSupportedFileFormats: json,parquet,csv

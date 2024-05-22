@@ -18,8 +18,10 @@ public class ConfigProperties {
 	
 	private String destinationInfoSuffix;
 	
-	private String supportedFileFormats;
+	private String destinationSupportedFileFormats;
 	
 	private String jobConfigInfoSuffix;
+	
+	private String sourceSupportedFileFormats;
 
 }

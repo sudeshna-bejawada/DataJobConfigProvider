@@ -12,7 +12,7 @@ public class JobConfigurationInfo {
 	
 	
 	private String jobName;
-	private String jobDesc;
+	private String jobDescription;
 	private SourceType source_type;
 	private String source_url;
 	private String schema;

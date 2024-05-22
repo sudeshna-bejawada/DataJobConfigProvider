@@ -64,14 +64,14 @@ public class DataJobConfigController {
 			return ResponseEntity.status(HttpStatus.CREATED).body(" Created access data job file " + fileName+ " in the Location " + path);
 
 		} else {
-			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given Location " + path);
+			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + " file  already exist in the given Location " + path);
 		}
 
 	}
 
 	
 	@PostMapping("v1/api/jobconfigurations")
-	public ResponseEntity<?> postJobConfigurationInfo(@RequestBody JobConfigurationInfo jobConfigInfo) throws IOException {
+	public ResponseEntity<?> postJobConfigurationInfo(@RequestBody JobConfigurationInfo jobConfigInfo) throws IOException, BadRequestFormatException {
 
 		String jobName = jobConfigInfo.getJobName();
 		dataConfigHelper.validateJobName(jobName);
@@ -90,7 +90,7 @@ public class DataJobConfigController {
 			return ResponseEntity.status(HttpStatus.CREATED).body(" Created job configuration file " + fileName + " in the Location " + path);
 
 		} else {
-			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given Location " + path);
+			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + " file  already exist in the given Location " + path);
 		}
 
 	}
@@ -103,7 +103,7 @@ public class DataJobConfigController {
 
 		dataConfigHelper.validateJobName(jobName);
 		dataConfigHelper.validateBucket(destinationInfo.getDestination().getBucket());
-		dataConfigHelper.validateFileFormats(destinationInfo.getDestination().getFormat());
+		dataConfigHelper.validateFileFormats(destinationInfo.getDestination().getFormat(), configProperties.getDestinationSupportedFileFormats());
 
 		String fileName = dataConfigHelper.getFileName(jobName, configProperties.getDestinationInfoSuffix());
 		String path = configProperties.getPath();
@@ -117,19 +117,19 @@ public class DataJobConfigController {
 			return ResponseEntity.status(HttpStatus.CREATED).body(" Created destination details job file " + fileName + " in the Location " + path);
 
 		} else {
-			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + "file  already exist in the given Location " + path);
+			return ResponseEntity.status(HttpStatus.FOUND).body(fileName + " file  already exist in the given Location " + path);
 		}
 
 	}
 
 	
 	
-	private JobConfigurationResponse buildJobConfigurationResponse(JobConfigurationInfo jobConfigInfo) {
+	private JobConfigurationResponse buildJobConfigurationResponse(JobConfigurationInfo jobConfigInfo) throws BadRequestFormatException {
 		
 		SourceType sourceType = jobConfigInfo.getSource_type();
 		JobConfigurationResponse response = new JobConfigurationResponse();
 		response.setJobName(jobConfigInfo.getJobName());
-		response.setJobDesc(jobConfigInfo.getJobDesc());
+		response.setJobDesc(jobConfigInfo.getJobDescription());
 		
 		if( sourceType.equals(SourceType.FILE_SYSTEM)) {
 			dataConfigHelper.validatePathAndFileType(jobConfigInfo.getPath(),jobConfigInfo.getFile_type());	
