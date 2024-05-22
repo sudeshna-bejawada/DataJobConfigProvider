@@ -4,7 +4,7 @@ jobDesc: "Database Job Configu"
 source:
   source_type: "DATABASE"
   source_url: "www.SQLDeveloper.url"
-  schema_keyspace: null
+  schema_keyspace: "DBTest"
   job_Configurations:
   - tables:
     - name: "Employee"

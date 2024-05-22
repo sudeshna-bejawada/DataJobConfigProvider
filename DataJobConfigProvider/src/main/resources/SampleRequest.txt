@@ -44,7 +44,7 @@ File System Request:
     "jobDesc": "Database Job Configu",
     "source_type" :"DATABASE",
         "source_url": "www.SQLDeveloper.url",
-         "schema_keyspace": "Sample",        
+         "schema": "Sample",        
         "dataBaseJobConfigurations": [
             {
                 "tables": [
