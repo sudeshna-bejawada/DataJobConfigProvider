@@ -43,7 +43,7 @@ public class DataConfigHelper {
 		List<String> supportedFormats = Arrays.asList(configProperties.getSupportedFileFormats().split(","));
 		logger.info("supported formats are: " + supportedFormats);
 		if (!supportedFormats.contains(format)) {
-			throw new BadRequestFormatException("input file format " + format + " is not supported");
+			throw new BadRequestFormatException("Unsupported file format " + format );
 		}
 
 	}
@@ -71,11 +71,14 @@ public class DataConfigHelper {
 
 
 	public void validatePathAndFileType(String path, String file_type) {
+	
+		//Supported formats  CSV,Jason,Parquet
 		// TODO Auto-generated method stub
 		
 	}
 
 	public void validateSchemaAndSourceUrl(String schema, String source_url) {
+		//check for v empty only
 		// TODO Auto-generated method stub
 		
 	}

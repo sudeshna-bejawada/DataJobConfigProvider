@@ -2,7 +2,7 @@ package com.lloyds.data.job.configuration.dto;
 
 public enum SourceType {
 
-	DATABASE("database"), FILE_SYSTEM("file System"), IMAGE("image"), VIDEO("video");
+	DATABASE("database"), FILE_SYSTEM("fileSystem"), IMAGE("image"), VIDEO("video");
 
 	SourceType(String sourceType) {
 		this.setSourceType(sourceType);
