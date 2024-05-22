@@ -1,11 +1,13 @@
 File System Request:
+File System Request:
+
 {
     "jobName": "TestCSV",
-    "jobDesc": "Description",
+    "jobDescription": "Description",
     "source_type" :"FILE_SYSTEM",   
         "path" : "classpath",
-        "file_type": "CSV",
-        "fileSystemJobConfigurations": [
+        "file_type": "csv",
+        "jobConfigurations": [
             { "columns": [
                             {
                                 "name": "ID",
@@ -32,7 +34,9 @@ File System Request:
             }
         ]
     }
-    
+
+
+
  DataBase Request:
     
     {
@@ -94,4 +98,42 @@ File System Request:
             }
         ]
     }
+    
+    Kafka request :
+    
+    {
+    "jobName": "TestKafkaStream",
+    "jobDescription": "Description",
+    "source_type" :"KAFKA_STREAM", 
+    "source_url" : "localhost:8080",  
+        "topicName" : "kafkatopic",
+        "topicType": "json",
+        "jobConfigurations": [
+            { "columns": [
+                            {
+                                "name": "ID",
+                                "type": "VarChar2()",
+                                "value_range": "1234"
+                                
+                            },
+                            {
+                                "name": "name",
+                                "type": "VarChar2()",
+                                "value_range": "Sudeshna"                              
+                                
+                               
+                            },
+                            {
+                                "name": "Dept_ID",
+                                "type": "VarChar2()",
+                                "value_range": "1234"
+                                
+                            }
+                        ]
+                    
+            
+            }
+        ]
+    }
+
     

@@ -1,10 +1,11 @@
 ---
-jobName: "TestCSV"
+jobName: "TestKafkaStream"
 jobDesc: "Description"
 source:
-  source_type: "FILE_SYSTEM"
-  path: "classpath"
-  file_Type: "csv"
+  source_type: "KAFKA_STREAM"
+  source_url: "localhost:8080"
+  topic_name: "kafkatopic"
+  topic_type: "json"
   job_Configurations:
   - columns:
     - name: "ID"

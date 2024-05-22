@@ -16,9 +16,11 @@ public class JobConfigurationInfo {
 	private SourceType source_type;
 	private String source_url;
 	private String schema;
+	private String topicName;
+	private String topicType;
 	private String Path;
 	private String file_type;
-	private List<FileSystemJobConfiguration>  fileSystemJobConfigurations;
+	private List<FileSystemJobConfiguration>  jobConfigurations;
 	private List<DataBaseJobConfigurations>  dataBaseJobConfigurations;
 	
 	

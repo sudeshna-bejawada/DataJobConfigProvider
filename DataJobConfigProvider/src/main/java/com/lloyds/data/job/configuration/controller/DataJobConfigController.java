@@ -28,6 +28,7 @@ import com.lloyds.data.job.configuration.helper.DataConfigHelper;
 import com.lloyds.data.job.configuration.response.FileSource;
 import com.lloyds.data.job.configuration.response.DataBaseSource;
 import com.lloyds.data.job.configuration.response.JobConfigurationResponse;
+import com.lloyds.data.job.configuration.response.KafkaSource;
 
 @Controller
 @RequestMapping("datajobconfig")
@@ -138,7 +139,7 @@ public class DataJobConfigController {
 			source.setSource_type(jobConfigInfo.getSource_type());
 			source.setPath(jobConfigInfo.getPath());
 			source.setFile_Type(jobConfigInfo.getFile_type());
-			source.setJob_Configurations(jobConfigInfo.getFileSystemJobConfigurations());
+			source.setJob_Configurations(jobConfigInfo.getJobConfigurations());
 			response.setSource(source);
 		}
 		if( sourceType.equals(SourceType.DATABASE)) {
@@ -151,6 +152,19 @@ public class DataJobConfigController {
 			databaseResource.setJob_Configurations(jobConfigInfo.getDataBaseJobConfigurations());
 			response.setSource(databaseResource);
 		}
+		
+		if( sourceType.equals(SourceType.KAFKA_STREAM)) {
+			dataConfigHelper.validateKafkaSource();
+			//System.out.println("size-->"+jobConfigInfo.getDataBaseJobConfigurations().size());
+			KafkaSource resource= new KafkaSource();
+			resource.setSource_type(jobConfigInfo.getSource_type());
+			resource.setSource_url(jobConfigInfo.getSource_url());
+			resource.setTopic_name(jobConfigInfo.getTopicName());
+			resource.setTopic_type(jobConfigInfo.getTopicType());
+			resource.setJob_Configurations(jobConfigInfo.getJobConfigurations());
+			response.setSource(resource);
+		}
+		
 		
 		return response;
 		
