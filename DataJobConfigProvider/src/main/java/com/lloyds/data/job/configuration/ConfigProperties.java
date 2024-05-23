@@ -23,5 +23,7 @@ public class ConfigProperties {
 	private String jobConfigInfoSuffix;
 	
 	private String sourceSupportedFileFormats;
+	
+	private String gcsbucket;
 
 }

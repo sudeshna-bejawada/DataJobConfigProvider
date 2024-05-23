@@ -10,3 +10,5 @@ data:
      jobConfigInfoSuffix: job_configurations
      destinationSupportedFileFormats: avro,parquet,csv
      sourceSupportedFileFormats: json,parquet,csv
+     gcsBucket:
+    

@@ -2,6 +2,7 @@ package com.lloyds.data.job.configuration.helper;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +41,11 @@ public class DataConfigHelper {
 		if (format == null || format.isEmpty()) {
 			throw new NullPointerException("format must have value");
 		}
-		List<String> supportedFormats = Arrays.asList(supportedFileFormats.split(","));
-		logger.info("supported formats are: " + supportedFormats);
-		if (!supportedFormats.contains(format)) {
+
+		boolean contains = Stream.of(supportedFileFormats.split(",")).anyMatch(s -> s.equals(format));
+
+		logger.info("supported formats are: " + supportedFileFormats);
+		if (!contains) {
 			throw new BadRequestFormatException("Unsupported file format " + format);
 		}
 
